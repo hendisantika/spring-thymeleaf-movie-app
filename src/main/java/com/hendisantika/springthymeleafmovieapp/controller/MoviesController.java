@@ -1,5 +1,6 @@
 package com.hendisantika.springthymeleafmovieapp.controller;
 
+import com.hendisantika.springthymeleafmovieapp.domain.Actor;
 import com.hendisantika.springthymeleafmovieapp.domain.Movie;
 import com.hendisantika.springthymeleafmovieapp.repository.ActorRepository;
 import com.hendisantika.springthymeleafmovieapp.repository.MovieRepository;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by IntelliJ IDEA.
@@ -53,6 +57,35 @@ public class MoviesController {
         model.addAttribute("movie", newMovie);
         model.addAttribute("actors", actorRepository.findAll());
         return "redirect:/movie/" + newMovie.getId();
+    }
+
+    @PostMapping("/movie/{id}/actors")
+    public String addMovieActors(@PathVariable Long id, @RequestParam Long actorId, Model model) {
+        Optional<Actor> actorOptional = actorRepository.findById(actorId);
+        Actor actor = null;
+
+        if (actorOptional.isPresent()) {
+            actor = actorOptional.get();
+        }
+
+        Optional<Movie> movieOptional = movieRepository.findById(id);
+        Movie movie = null;
+
+        if (movieOptional.isPresent()) {
+            movie = movieOptional.get();
+        }
+
+        if (Objects.nonNull(movie)) {
+            if (!movie.hasActed(actor)) {
+                movie.getActors().add(actor);
+            }
+            movieRepository.save(movie);
+            model.addAttribute("movie", movieRepository.findById(id).get());
+            model.addAttribute("actors", actorRepository.findAll());
+            return "redirect:/movie/" + movie.getId();
+        }
+        model.addAttribute("movies", movieRepository.findAll());
+        return "redirect:/movies";
     }
 }
 

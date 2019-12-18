@@ -1,5 +1,6 @@
 package com.hendisantika.springthymeleafmovieapp.controller;
 
+import com.hendisantika.springthymeleafmovieapp.domain.Movie;
 import com.hendisantika.springthymeleafmovieapp.repository.ActorRepository;
 import com.hendisantika.springthymeleafmovieapp.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Created by IntelliJ IDEA.
@@ -37,6 +40,19 @@ public class MoviesController {
     public String getAllMovies(Model model) {
         model.addAttribute("movies", movieRepository.findAll());
         return "movies";
+    }
+
+    @PostMapping("/movies")
+    public String addMovie(@RequestParam String title, @RequestParam String productionHouse, @RequestParam String releaseYear, Model model) {
+        Movie newMovie = new Movie();
+        newMovie.setTitle(title);
+        newMovie.setProductionHouse(productionHouse);
+        newMovie.setReleaseYear(releaseYear);
+
+        movieRepository.save(newMovie);
+        model.addAttribute("movie", newMovie);
+        model.addAttribute("actors", actorRepository.findAll());
+        return "redirect:/movie/" + newMovie.getId();
     }
 }
 

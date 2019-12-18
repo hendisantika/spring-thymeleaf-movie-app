@@ -32,5 +32,11 @@ public class MoviesController {
         model.addAttribute("actors", actorRepository.findAll());
         return "movie";
     }
+
+    @GetMapping("/movies")
+    public String getAllMovies(Model model) {
+        model.addAttribute("movies", movieRepository.findAll());
+        return "movies";
+    }
 }
 

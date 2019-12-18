@@ -40,7 +40,7 @@ public class MoviesController {
         return "movie";
     }
 
-    @GetMapping("/movies")
+    @GetMapping({"/", "/movies"})
     public String getAllMovies(Model model) {
         model.addAttribute("movies", movieRepository.findAll());
         return "movies";

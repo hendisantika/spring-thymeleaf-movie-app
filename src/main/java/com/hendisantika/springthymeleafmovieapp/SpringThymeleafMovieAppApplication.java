@@ -4,7 +4,7 @@ import com.hendisantika.springthymeleafmovieapp.domain.Actor;
 import com.hendisantika.springthymeleafmovieapp.domain.Movie;
 import com.hendisantika.springthymeleafmovieapp.repository.ActorRepository;
 import com.hendisantika.springthymeleafmovieapp.repository.MovieRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,13 +14,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 @SpringBootApplication
+@RequiredArgsConstructor
 public class SpringThymeleafMovieAppApplication implements CommandLineRunner {
 
-    @Autowired
-    private MovieRepository movieRepository;
+    private final MovieRepository movieRepository;
 
-    @Autowired
-    private ActorRepository actorRepository;
+    private final ActorRepository actorRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringThymeleafMovieAppApplication.class, args);
